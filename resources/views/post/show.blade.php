@@ -18,6 +18,11 @@
                 </div>
             </header>
             <main class="p-10">
+                @foreach ($post->attachments as $attachment)
+                    <img src="{{ asset($attachment->path . $attachment->filename) }}" alt="">
+                @endforeach
+
+
                 <p>{{ $post->content }}</p>
             </main>
             <footer class=" p-5 flex justify-evenly">

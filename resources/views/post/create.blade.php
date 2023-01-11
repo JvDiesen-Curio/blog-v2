@@ -25,6 +25,12 @@
                     @error('content')
                         <div class="text-red-400">{{ $message }}</div>
                     @enderror
+                    <label for="image">Image:</label>
+                    <input class=" bg-gray-200 border border-blue-400 rounded-sm" type="file" name="image"
+                        id="image" value="{{ old('subject') }}" accept="image/*">
+                    @error('image')
+                        <div class="text-red-400">{{ $message }}</div>
+                    @enderror
                     <button class="mt-5 w-full bg-blue-500 text-white hover:bg-blue-800  text-lg" type="submit">
                         Save</button>
                 </form>

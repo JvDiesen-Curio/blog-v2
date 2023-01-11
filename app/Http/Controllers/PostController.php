@@ -14,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         return view('post.index', [
-            'posts' => post::paginate(6)
+            'posts' => post::orderby('created_at', 'desc')->paginate(6)
         ]);
     }
 
@@ -30,11 +30,26 @@ class PostController extends Controller
             'title' => ['required', 'min:3', 'max:255'],
             'subject' => ['required', 'min:3', 'max:255', 'unique:posts,subject'],
             'content' => ['required', 'min:3'],
-
+            'image' => ['required', 'image']
         ]);
 
+        $image =  $data['image'];
+        unset($data['image']);
+
+        $imageNewFileName = date('YmdHis') . "-" . Auth::user()->id . "." . $image->extension();
+
+        Storage::disk('public')->put($imageNewFileName, $image->get());
+
         $data['user_id'] = Auth::user()->id;
+
         $post =  post::create($data);
+
+        $post->attachments()->create([
+            'user_id' => Auth::user()->id,
+            'path' => 'storage/',
+            'filename' => $imageNewFileName
+        ]);
+
         return redirect()->route('post');
     }
 
